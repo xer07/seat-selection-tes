@@ -140,15 +140,6 @@ fetch(scriptUrl)
     console.error(err);
     renderSeats();
 
-    fetch(scriptUrl)
-  .then(res => res.json())
-  .then(data => {
-    unavailableSeats.clear();
-    data.forEach(seatId => unavailableSeats.add(seatId));
-    renderSeats();
-  });
-
-
     setInterval(() => {
   fetch(scriptUrl)
     .then(res => res.json())
