@@ -139,6 +139,30 @@ fetch(scriptUrl)
     alert('無法載入已選座位資料');
     console.error(err);
     renderSeats();
+
+    fetch(scriptUrl)
+  .then(res => res.json())
+  .then(data => {
+    unavailableSeats.clear();
+    data.forEach(seatId => unavailableSeats.add(seatId));
+    renderSeats();
+  });
+
+
+    setInterval(() => {
+  fetch(scriptUrl)
+    .then(res => res.json())
+    .then(data => {
+      unavailableSeats.clear();
+      for (let i = 1; i <= 14; i++) unavailableSeats.add(`1-${i}`);
+      for (let row = 2; row <= 3; row++) for (let i = 1; i <= 8; i++) unavailableSeats.add(`${row}-${i}`);
+      for (let row = 11; row <= 23; row++) for (let i = 9; i <= 24; i++) unavailableSeats.add(`${row}-${i}`);
+      data.forEach(seatId => unavailableSeats.add(seatId));
+      renderSeats();
+    })
+    .catch(err => console.error('座位同步失敗', err));
+}, 5000); // 每5秒自動同步
+
   });
 </script>
 </body>
