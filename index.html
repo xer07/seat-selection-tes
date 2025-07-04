@@ -102,22 +102,6 @@ function createSeatElement(row, seatNum) {
   return seat;
 }
 
-function updateUnavailableSeats() {
-  fetch(scriptUrl)
-    .then(res => res.json())
-    .then(data => {
-      unavailableSeats.clear();
-      for (let i = 1; i <= 14; i++) unavailableSeats.add(`1-${i}`);
-      for (let row = 2; row <= 3; row++) for (let i = 1; i <= 8; i++) unavailableSeats.add(`${row}-${i}`);
-      for (let row = 11; row <= 23; row++) for (let i = 9; i <= 24; i++) unavailableSeats.add(`${row}-${i}`);
-      data.forEach(seatId => unavailableSeats.add(seatId));
-      renderSeats();
-    })
-    .catch(err => {
-      console.error('座位同步失敗', err);
-    });
-}
-
 function submitSelection() {
   const name = document.getElementById('username').value.trim();
   if (!name) return alert('請輸入姓名！');
@@ -137,7 +121,16 @@ function submitSelection() {
       document.getElementById('result').innerText = `姓名: ${name}
 已送出座位：${seats}`;
       selectedSeats.clear();
-      updateUnavailableSeats();
+      fetch(scriptUrl)
+        .then(res => res.json())
+        .then(data => {
+          unavailableSeats.clear();
+          for (let i = 1; i <= 14; i++) unavailableSeats.add(`1-${i}`);
+          for (let row = 2; row <= 3; row++) for (let i = 1; i <= 8; i++) unavailableSeats.add(`${row}-${i}`);
+          for (let row = 11; row <= 23; row++) for (let i = 9; i <= 24; i++) unavailableSeats.add(`${row}-${i}`);
+          data.forEach(seatId => unavailableSeats.add(seatId));
+          renderSeats();
+        });
     })
     .catch(err => {
       alert('送出失敗！');
@@ -146,8 +139,17 @@ function submitSelection() {
   }
 }
 
-updateUnavailableSeats();
-setInterval(updateUnavailableSeats, 5000);
+fetch(scriptUrl)
+  .then(res => res.json())
+  .then(data => {
+    data.forEach(seatId => unavailableSeats.add(seatId));
+    renderSeats();
+  })
+  .catch(err => {
+    alert('無法載入已選座位資料');
+    console.error(err);
+    renderSeats();
+  });
 </script>
 </body>
 </html>
