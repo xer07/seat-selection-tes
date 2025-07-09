@@ -161,28 +161,6 @@ fetch(scriptUrl)
 </div>
 
 <script>
-function adminClearAll() {
-  if (confirm('⚠️ 確定要清空所有已劃位紀錄嗎？')) {
-    fetch(scriptUrl + '?clearAll=true')
-      .then(res => res.json())
-      .then(result => {
-        if (result.status === 'cleared') {
-          alert('✅ 所有座位已清空');
-          unavailableSeats.clear();
-          fetch(scriptUrl)
-            .then(res => res.json())
-            .then(data => {
-              data.forEach(seatId => unavailableSeats.add(seatId));
-              renderSeats();
-            });
-        } else {
-          alert('❌ 清除失敗');
-        }
-      })
-      .catch(err => {
-        alert('❌ 無法清除資料');
-        console.error(err);
-      });
   }
 }
 </script>
