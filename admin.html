@@ -8,13 +8,13 @@
 <body>
   <h2>管理員清除頁面</h2>
   <p>請輸入密碼以清除所有座位紀錄：</p>
-  <input type="password" id="adminPwd" placeholder="輸入密碼">
+  <input type="password" id="admin123" placeholder="輸入密碼">
   <button onclick="clearSeats()">清除座位</button>
   <p id="message" style="margin-top:20px; font-weight:bold;"></p>
 
   <script>
     function clearSeats() {
-      const pwd = document.getElementById('adminPwd').value.trim();
+      const pwd = document.getElementById('admin123').value.trim();
       if (!pwd) return alert("請輸入密碼");
 
       fetch("https://script.google.com/macros/s/AKfycbzyB7ueJFX_5aGlUk7gJcvwdMFDNVhcVXLwWfGJoQfza_UiXPc-pcZkxH3hpKGu-E1PVA/exec?clearAll=true&secret=" + pwd)
