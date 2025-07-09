@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>管理後台 - 劃位清除</title>
+</head>
+<body>
+  <h2>管理員清除頁面</h2>
+  <p>請輸入密碼以清除所有座位紀錄：</p>
+  <input type="password" id="adminPwd" placeholder="輸入密碼">
+  <button onclick="clearSeats()">清除座位</button>
+  <p id="message" style="margin-top:20px; font-weight:bold;"></p>
+
+  <script>
+    function clearSeats() {
+      const pwd = document.getElementById('adminPwd').value.trim();
+      if (!pwd) return alert("請輸入密碼");
+
+      fetch("https://script.google.com/macros/s/AKfycbzyB7ueJFX_5aGlUk7gJcvwdMFDNVhcVXLwWfGJoQfza_UiXPc-pcZkxH3hpKGu-E1PVA/exec?clearAll=true&secret=" + pwd)
+        .then(res => res.json())
+        .then(result => {
+          if (result.status === 'cleared') {
+            document.getElementById('message').innerText = "✅ 已成功清除所有座位紀錄";
+          } else {
+            document.getElementById('message').innerText = "❌ 清除失敗：" + (result.message || '請確認密碼是否正確');
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          document.getElementById('message').innerText = "❌ 無法連線";
+        });
+    }
+  </script>
+</body>
+</html>
