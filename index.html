@@ -39,7 +39,7 @@
 <div id="result"></div>
 
 <script>
-const scriptUrl = 'https://script.google.com/macros/s/AKfycbzDuzPCBtDGi4OV96LQE-EYKF9ShvctWpuiqCjvzgBcqD5IA79AVo8Q_mCSd2gBx8oZVw/exec';
+const scriptUrl = 'https://script.google.com/macros/s/AKfycbwMo0WV_1Wh81NX-_RwR1afGTBqzoWj6qWCBxDhQgyLJeFI-kjuhKLe6ZPHPIua77FsQA/exec';
 const unavailableSeats = new Set();
 const selectedSeats = new Set();
 const seatConfig = {};
@@ -156,5 +156,36 @@ fetch(scriptUrl)
 
   });
 </script>
+  <div class="controls" style="margin-top:20px; text-align:center;">
+  <button onclick="adminClearAll()">🧹 管理員清空全部座位</button>
+</div>
+
+<script>
+function adminClearAll() {
+  if (confirm('⚠️ 確定要清空所有已劃位紀錄嗎？')) {
+    fetch(scriptUrl + '?clearAll=true')
+      .then(res => res.json())
+      .then(result => {
+        if (result.status === 'cleared') {
+          alert('✅ 所有座位已清空');
+          unavailableSeats.clear();
+          fetch(scriptUrl)
+            .then(res => res.json())
+            .then(data => {
+              data.forEach(seatId => unavailableSeats.add(seatId));
+              renderSeats();
+            });
+        } else {
+          alert('❌ 清除失敗');
+        }
+      })
+      .catch(err => {
+        alert('❌ 無法清除資料');
+        console.error(err);
+      });
+  }
+}
+</script>
+
 </body>
 </html>
