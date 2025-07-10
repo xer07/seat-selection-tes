@@ -4,13 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>管理後台 - 劃位清除</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background-color: #f8f8f8; }
+    h2 { color: #333; }
+    input { padding: 8px; width: 250px; margin-top: 10px; }
+    button { padding: 8px 15px; margin-left: 10px; cursor: pointer; }
+    #message { margin-top: 20px; font-weight: bold; color: #cc0000; }
+  </style>
 </head>
 <body>
   <h2>管理員清除頁面</h2>
   <p>請輸入密碼以清除所有座位紀錄：</p>
   <input type="password" id="admin123" placeholder="輸入密碼">
   <button onclick="clearSeats()">清除座位</button>
-  <p id="message" style="margin-top:20px; font-weight:bold;"></p>
+  <p id="message"></p>
 
   <script>
     function clearSeats() {
@@ -21,13 +28,16 @@
         .then(res => res.json())
         .then(result => {
           if (result.status === 'cleared') {
+            document.getElementById('message').style.color = 'green';
             document.getElementById('message').innerText = "✅ 已成功清除所有座位紀錄";
           } else {
+            document.getElementById('message').style.color = 'red';
             document.getElementById('message').innerText = "❌ 清除失敗：" + (result.message || '請確認密碼是否正確');
           }
         })
         .catch(err => {
           console.error(err);
+          document.getElementById('message').style.color = 'red';
           document.getElementById('message').innerText = "❌ 無法連線";
         });
     }
